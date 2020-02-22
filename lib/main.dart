@@ -14,14 +14,21 @@ class MyApp extends StatelessWidget {
 }
 
 class PalavrasAleatoriasState extends State<PalavrasAleatorias> {
-  final _sugestoes = <WordPair>[];
-  final _fonteGrande = const TextStyle(fontSize: 18.0);
+  final List<WordPair> _sugestoes = <WordPair>[];
+  final Set<WordPair> _salvo = Set<WordPair>();
+  final TextStyle _fonteGrande = const TextStyle(fontSize: 18.0);
 
   Widget _buildLinha(WordPair pair) {
+    final bool jaSalvo = _salvo.contains(pair);
+
     return ListTile(
       title: Text(
         pair.asPascalCase,
         style: _fonteGrande,
+      ),
+      trailing: Icon(
+        jaSalvo ? Icons.favorite : Icons.favorite_border,
+        color: jaSalvo ? Colors.red : null,
       ),
     );
   }
