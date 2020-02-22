@@ -30,6 +30,15 @@ class PalavrasAleatoriasState extends State<PalavrasAleatorias> {
         jaSalvo ? Icons.favorite : Icons.favorite_border,
         color: jaSalvo ? Colors.red : null,
       ),
+      onTap: () {
+        setState(() {
+          if (jaSalvo) {
+            _salvo.remove(pair);
+          } else {
+            _salvo.add(pair);
+          }
+        });
+      },
     );
   }
 
