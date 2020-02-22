@@ -8,21 +8,38 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Gerador de nomes',
+      theme: ThemeData(primaryColor: Colors.white),
       home: PalavrasAleatorias(),
     );
   }
 }
 
 class PalavrasAleatoriasState extends State<PalavrasAleatorias> {
-  final _sugestoes = <WordPair>[];
-  final _fonteGrande = const TextStyle(fontSize: 18.0);
+  final List<WordPair> _sugestoes = <WordPair>[];
+  final Set<WordPair> _salvo = Set<WordPair>();
+  final TextStyle _fonteGrande = const TextStyle(fontSize: 18.0);
 
   Widget _buildLinha(WordPair pair) {
+    final bool jaSalvo = _salvo.contains(pair);
+
     return ListTile(
       title: Text(
         pair.asPascalCase,
         style: _fonteGrande,
       ),
+      trailing: Icon(
+        jaSalvo ? Icons.favorite : Icons.favorite_border,
+        color: jaSalvo ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (jaSalvo) {
+            _salvo.remove(pair);
+          } else {
+            _salvo.add(pair);
+          }
+        });
+      },
     );
   }
 
@@ -41,11 +58,39 @@ class PalavrasAleatoriasState extends State<PalavrasAleatorias> {
     );
   }
 
+  void _empurrarSalvos() {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (BuildContext context) {
+      final Iterable<ListTile> tiles = _salvo.map((WordPair pair) {
+        return ListTile(
+          title: Text(
+            pair.asPascalCase,
+            style: _fonteGrande,
+          ),
+        );
+      });
+      final List<Widget> divided =
+          ListTile.divideTiles(context: context, tiles: tiles).toList();
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Sugestoes Salvas'),
+        ),
+        body: ListView(
+          children: divided,
+        ),
+      );
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gerador de nomes maneiros'),
+        title: Text('Gerador de nomes'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.list), onPressed: _empurrarSalvos),
+        ],
       ),
       body: _buildSugestoes(),
     );
