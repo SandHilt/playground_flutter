@@ -58,7 +58,7 @@ class PalavrasAleatoriasState extends State<PalavrasAleatorias> {
     );
   }
 
-  void _EmpurrarSalvos() {
+  void _empurrarSalvos() {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (BuildContext context) {
       final Iterable<ListTile> tiles = _salvo.map((WordPair pair) {
@@ -89,7 +89,7 @@ class PalavrasAleatoriasState extends State<PalavrasAleatorias> {
       appBar: AppBar(
         title: Text('Gerador de nomes'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.list), onPressed: _EmpurrarSalvos),
+          IconButton(icon: Icon(Icons.list), onPressed: _empurrarSalvos),
         ],
       ),
       body: _buildSugestoes(),
